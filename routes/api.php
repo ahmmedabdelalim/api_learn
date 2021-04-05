@@ -17,6 +17,15 @@ use App\Http\Controllers\Api\CategoriesController;
 // route for api
 Route::group(['middleware'=>['api','checkpassword','apilang']],function (){
 
-    Route::post('index',[ CategoriesController::class, 'index'])->name('admin.languages.create');;
+    Route::post('index',[ CategoriesController::class, 'index'])->name('admin.languages.create');
+    Route::post('getCategorybyId',[ CategoriesController::class, 'getCategorybyId']);
+
+});
+
+
+Route::group(['middleware'=>['api','checkpassword','apilang','CheckAdminToken:admin-api']],function (){
+
+    Route::post('index',[ CategoriesController::class, 'index'])->name('admin.languages.create');
+    Route::post('getCategorybyId',[ CategoriesController::class, 'getCategorybyId']);
 
 });
