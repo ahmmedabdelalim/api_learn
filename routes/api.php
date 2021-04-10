@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CategoriesController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\User\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,8 +27,23 @@ Route::group(['middleware'=>['api','checkpassword','apilang']],function (){
     {
         Route::get('login',[ AuthController::class, 'login']);
 
-        Route::get('logout',[ AuthController::class, 'logout'])->middleware(['auth.guard:admin-api']);
+        Route::get('logout',[ AuthController::class, 'logout'])->middleware(['auth.guard:admin-api']); // معني يجب استخدام هذا الجارد انه هيبحث في تيبل معين
 
+    });
+    ///////////
+    Route::group(['prefix'=>'user'],function()
+    {
+        Route::get('login',[ UserController::class, 'login']);
+
+        Route::get('logout',[ UserController::class, 'logout'])->middleware(['auth.guard:admin-api']); // معني يجب استخدام هذا الجارد انه هيبحث في تيبل معين
+
+    });
+    // route for user
+
+    route::group(['prefix'=>'user','middleware'=>'auth.guard:user-api'],function() // the middleware & guard here for user only can do this
+    {
+        route::post('profile',function()
+        {return 'user can only ';}) ;
     });
 
 });
