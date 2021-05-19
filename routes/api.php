@@ -1,10 +1,11 @@
 <?php
 
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\CategoriesController;
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\User\UserController;
+
+use App\Http\Controllers\Api\Admin\AuthAdminController;
+use App\Http\Controllers\Api\Admin\AgencysController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,41 +18,21 @@ use App\Http\Controllers\Api\User\UserController;
 |
 */
 // route for api
-Route::group(['middleware'=>['api','checkpassword','apilang']],function (){
 
-    Route::post('index',[ CategoriesController::class, 'index'])->name('admin.languages.create');
-    Route::post('getCategorybyId',[ CategoriesController::class, 'getCategorybyId']);
 
-    /////////
+Route::group(['middleware'=>['api','checkpassword']],function (){
     Route::group(['prefix'=>'admin'],function()
     {
-        Route::get('login',[ AuthController::class, 'login']);
+        Route::post('login',[ AuthAdminController::class, 'login']);
+        Route::post('register',[ AuthAdminController::class, 'register']);
 
-        Route::get('logout',[ AuthController::class, 'logout'])->middleware(['auth.guard:admin-api']); // معني يجب استخدام هذا الجارد انه هيبحث في تيبل معين
 
+         // معني يجب استخدام هذا الجارد انه هيبحث في تيبل معين
+        Route::post('logout',[ AuthAdminController::class, 'logout']);//->middleware('auth.guard:admin-api');
+
+        /////////
+
+        Route::post('create',[AgencysController::class, 'create']);
     });
-    ///////////
-    Route::group(['prefix'=>'user'],function()
-    {
-        Route::get('login',[ UserController::class, 'login']);
-
-        Route::get('logout',[ UserController::class, 'logout'])->middleware(['auth.guard:admin-api']); // معني يجب استخدام هذا الجارد انه هيبحث في تيبل معين
-
-    });
-    // route for user
-
-    route::group(['prefix'=>'user','middleware'=>'auth.guard:user-api'],function() // the middleware & guard here for user only can do this
-    {
-        route::post('profile',function()
-        {return 'user can only ';}) ;
-    });
-
-});
-
-
-Route::group(['middleware'=>['api','checkpassword','apilang','CheckAdminToken:admin-api']],function (){
-
-    Route::post('index',[ CategoriesController::class, 'index'])->name('admin.languages.create');
-    Route::post('getCategorybyId',[ CategoriesController::class, 'getCategorybyId']);
 
 });

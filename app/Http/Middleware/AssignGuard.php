@@ -25,8 +25,8 @@ class AssignGuard extends BaseMiddleware
     {
         if($guard != null){
             auth()->shouldUse($guard); //shoud you user guard / table
-            $token = $request->header('auth_token');
-            $request->headers->set('auth_token', (string) $token, true);
+            $token = $request->header('api_token');
+            $request->headers->set('api_token', (string) $token, true);
             $request->headers->set('Authorization', 'Bearer '.$token, true);
             try {
               //  $user = $this->auth->authenticate($request);  //check authenticted user
